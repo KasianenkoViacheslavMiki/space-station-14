@@ -10,6 +10,8 @@
       department: Security
       time: 28800 #8 hrs
       inverted: true # stop playing intern if you're good at security!
+    - !type:RaceRequirement
+      race: diona
   startingGear: SecurityCadetGear
   icon: "SecurityCadet"
   supervisors: job-supervisors-security
