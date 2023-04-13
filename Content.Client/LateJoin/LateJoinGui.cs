@@ -252,7 +252,7 @@ namespace Content.Client.LateJoin
 
                         jobButton.OnPressed += _ => SelectedId.Invoke((id, jobButton.JobId));
 
-                        if (!_playTimeTracking.IsAllowed(prototype, out var reasonTime) && !_raceTracking.IsAllowed(prototype, out var reasonRace))
+                        if (!(_playTimeTracking.IsAllowed(prototype, out var reasonTime) & _raceTracking.IsAllowed(prototype, out var reasonRace)))
                         {
                             jobButton.Disabled = true;
 

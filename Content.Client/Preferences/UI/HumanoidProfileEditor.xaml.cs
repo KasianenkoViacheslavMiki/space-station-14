@@ -433,7 +433,7 @@ namespace Content.Client.Preferences.UI
                 foreach (var job in jobs)
                 {
                     var selector = new JobPrioritySelector(job);
-                    if (!playTime.IsAllowed(job, out var reasonTime) && !race.IsAllowed(job, out var reasonRace))
+                    if (!(playTime.IsAllowed(job, out var reasonTime) & race.IsAllowed(job, out var reasonRace)))
                     {
                         selector.LockRequirements(reasonTime + reasonRace);
                     }
@@ -1170,7 +1170,7 @@ namespace Content.Client.Preferences.UI
                 var race = IoCManager.Resolve<RaceTrackingManager>();
                 var jobId = prioritySelector.Job.ID;
 
-                if (!playTime.IsAllowed(prioritySelector.Job, out var reasonTime) && !race.IsAllowed(prioritySelector.Job, out var reasonRace))
+                if (!(playTime.IsAllowed(prioritySelector.Job, out var reasonTime) & race.IsAllowed(prioritySelector.Job, out var reasonRace)))
                 {
                     prioritySelector.LockRequirements(reasonTime + reasonRace);
                 }
