@@ -63,11 +63,13 @@ namespace Content.Client.Players.RaceTracking
                 if (JobRequirements.TryRequirementMet(requirement, species, out reason, _prototypes))
                     continue;
 
-                if (!first)
+                if (!first && requirement is RaceRequirement)
                     reasonBuilder.Append('\n');
                 first = false;
-
-                reasonBuilder.AppendLine(reason);
+                if (reason != null && reason != "")
+                {
+                    reasonBuilder.AppendLine(reason);
+                }
             }
 
             reason = reasonBuilder.Length == 0 ? null : reasonBuilder.ToString();

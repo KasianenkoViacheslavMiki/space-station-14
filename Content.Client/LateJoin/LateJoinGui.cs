@@ -13,6 +13,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
+using Content.Client.Players.RaceTracking;
 
 namespace Content.Client.LateJoin
 {
@@ -23,6 +24,8 @@ namespace Content.Client.LateJoin
         [Dependency] private readonly IConfigurationManager _configManager = default!;
         [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
         [Dependency] private readonly PlayTimeTrackingManager _playTimeTracking = default!;
+        [Dependency] private readonly RaceTrackingManager _raceTracking = default!;
+
 
         public event Action<(EntityUid, string)> SelectedId;
 
@@ -249,13 +252,13 @@ namespace Content.Client.LateJoin
 
                         jobButton.OnPressed += _ => SelectedId.Invoke((id, jobButton.JobId));
 
-                        if (!_playTimeTracking.IsAllowed(prototype, out var reason))
+                        if (!_playTimeTracking.IsAllowed(prototype, out var reasonTime) && !_raceTracking.IsAllowed(prototype, out var reasonRace))
                         {
                             jobButton.Disabled = true;
 
-                            if (!string.IsNullOrEmpty(reason))
+                            if (!string.IsNullOrEmpty(reasonTime+ reasonRace))
                             {
-                                jobButton.ToolTip = reason;
+                                jobButton.ToolTip = reasonTime+ reasonRace;
                             }
 
                             jobSelector.AddChild(new TextureRect
