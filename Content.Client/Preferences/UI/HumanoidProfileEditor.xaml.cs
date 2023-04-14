@@ -1173,6 +1173,10 @@ namespace Content.Client.Preferences.UI
                 if (!(playTime.IsAllowed(prioritySelector.Job, out var reasonTime) & race.IsAllowed(prioritySelector.Job, out var reasonRace)))
                 {
                     prioritySelector.LockRequirements(reasonTime + reasonRace);
+                    if (Profile != null)
+                    {
+                        Profile = Profile.WithJobPriority(jobId, JobPriority.Never);
+                    }
                 }
 
                 var priority = Profile?.JobPriorities.GetValueOrDefault(jobId, JobPriority.Never) ?? JobPriority.Never;
