@@ -1,7 +1,10 @@
+using Content.Shared.Dictionary;
 using Content.Shared.Popups;
 using Content.Shared.Radio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using System.Linq;
+using System.Text;
 
 namespace Content.Shared.Chat;
 
@@ -30,11 +33,13 @@ public abstract class SharedChatSystem : EntitySystem
     /// </summary>
     private Dictionary<char, RadioChannelPrototype> _keyCodes = new();
 
+    private HashSet<UkrainianWord> _dictionary = new HashSet<UkrainianWord>();
     public override void Initialize()
     {
         base.Initialize();
         DebugTools.Assert(_prototypeManager.HasIndex<RadioChannelPrototype>(CommonChannel));
         _prototypeManager.PrototypesReloaded += OnPrototypeReload;
+        _dictionary = _prototypeManager.EnumeratePrototypes<DictionaryPrototype>().ToList()[0].Values.ToHashSet();
         CacheRadios();
     }
 
@@ -122,6 +127,44 @@ public abstract class SharedChatSystem : EntitySystem
         return true;
     }
 
+    public string SanitizeMessageNonRP(string message)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        
+        var messageSplit = message.Replace(" "," |").Split("|");
+
+        foreach (var split in messageSplit)
+        {
+            bool wasReplace = false;
+
+            foreach (var word in _dictionary)
+            {
+                if (word.AbbreviationValues == null || word.FullValues == null)
+                {
+                    continue;   
+                }
+                if (split.Length > 0 && split.ToLower().StartsWith(word.AbbreviationValues.ToLower()))
+                {
+                    if (Char.IsUpper(split[0]))
+                    {
+                        stringBuilder.Append(split.ToLower().Replace(word.AbbreviationValues.ToLower(), SanitizeMessageCapital(word.FullValues)));
+                    }
+                    else
+                    {
+                        stringBuilder.Append(split.ToLower().Replace(word.AbbreviationValues.ToLower(), word.FullValues));
+                    }
+                    wasReplace = true;
+                    break;
+                }
+            }
+            if (!wasReplace)
+            {
+                stringBuilder.Append(split);
+                wasReplace = false;
+            }
+        }
+        return stringBuilder.ToString();
+    }
     public string SanitizeMessageCapital(string message)
     {
         if (string.IsNullOrEmpty(message))

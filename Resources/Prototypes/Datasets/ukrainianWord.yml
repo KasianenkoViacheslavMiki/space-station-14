@@ -1,0 +1,18 @@
+- type: dictionary
+  id: ukrainianDictionary
+  value:
+    - type: ukrainianWord
+      abbreviationvalues: нюкери
+      fullvalues: Ядерні Оперативники
+    - type: ukrainianWord
+      abbreviationvalues: нюкерів
+      fullvalues: Ядерних Оперативників
+    - type: ukrainianWord
+      abbreviationvalues: гп
+      fullvalues: ГП
+    - type: ukrainianWord
+      abbreviationvalues: синга
+      fullvalues: сингулярність
+    - type: ukrainianWord
+      abbreviationvalues: сінга
+      fullvalues: сингулярність
