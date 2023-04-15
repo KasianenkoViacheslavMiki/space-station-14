@@ -4,5 +4,5 @@ role-timer-overall-insufficient = You require {TOSTRING($time, "0")} more minute
 role-timer-overall-too-high = You require {TOSTRING($time, "0")} fewer minutes of playtime to play this role. (Are you trying to play a trainee role?)
 role-timer-role-insufficient = You require {TOSTRING($time, "0")} more minutes with {$job} to play this role.
 role-timer-role-too-high = You require {TOSTRING($time, "0")} fewer minutes with {$job} to play this role. (Are you trying to play a trainee role?)
-
+role-timer-race-ban = You not can play {$race} on this job.
 role-timer-locked = Locked (hover for details)
