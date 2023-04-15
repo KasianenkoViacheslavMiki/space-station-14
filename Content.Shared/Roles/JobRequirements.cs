@@ -240,8 +240,8 @@ namespace Content.Shared.Roles
             {
                 if (race?.ToLower() != species.ToLower())
                     return true;
-
-                reason = Loc.GetString("role-timer-race-ban", ("race", species));
+                string nameSpecies = Loc.GetString("species-name-"+species.ToLower().Replace("person",""));
+                reason = Loc.GetString("role-timer-race-ban", ("race", nameSpecies.ToLower()));
                 return false;
             }
             else
