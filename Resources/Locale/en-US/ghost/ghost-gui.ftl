@@ -10,6 +10,7 @@ ghost-gui-toggle-lighting-manager-popup = Toggled all lighting.
 ghost-gui-toggle-fov-name = Toggle FoV
 ghost-gui-toggle-fov-desc = Toggles field-of-view in order to see what players see.
 ghost-gui-toggle-fov-popup = Toggled field-of-view.
+ghost-gui-ghost-respawn-button = Respawn
 
 ghost-target-window-title = Ghost Warp
 ghost-target-window-current-button = Warp: {$name}
