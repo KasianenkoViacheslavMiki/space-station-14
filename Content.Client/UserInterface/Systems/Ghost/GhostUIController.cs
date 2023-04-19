@@ -1,7 +1,9 @@
-﻿using Content.Client.Gameplay;
+using Content.Client.Gameplay;
+using Content.Client.GameTicking.Managers;
 using Content.Client.Ghost;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Ghost.Widgets;
+using Content.Client.UserRespawn;
 using Content.Shared.Ghost;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
@@ -14,6 +16,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     [Dependency] private readonly IEntityNetworkManager _net = default!;
 
     [UISystemDependency] private readonly GhostSystem? _system = default;
+    [UISystemDependency] private readonly UserRespawnSystem? _systemRespawn = default;
 
     private GhostGui? Gui => UIManager.GetActiveUIWidgetOrNull<GhostGui>();
 
@@ -120,6 +123,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         Gui.ReturnToBodyPressed += ReturnToBody;
         Gui.GhostRolesPressed += GhostRolesPressed;
         Gui.TargetWindow.WarpClicked += OnWarpClicked;
+        Gui.GhostRespawnPressed += RespawnGhost;
 
         UpdateGui();
     }
@@ -133,6 +137,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         Gui.ReturnToBodyPressed -= ReturnToBody;
         Gui.GhostRolesPressed -= GhostRolesPressed;
         Gui.TargetWindow.WarpClicked -= OnWarpClicked;
+        Gui.GhostRespawnPressed -= RespawnGhost;
 
         Gui.Hide();
     }
@@ -152,5 +157,15 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     private void GhostRolesPressed()
     {
         _system?.OpenGhostRoles();
+    }
+
+    private void RespawnGhost()
+    {
+        string? nickname = _system?.GetPlayerName();
+        if (nickname != null)
+        {
+            _systemRespawn?.RespawnUser(nickname);
+        }
+        return;
     }
 }
