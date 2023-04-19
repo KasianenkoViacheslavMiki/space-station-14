@@ -50,11 +50,9 @@ namespace Content.Shared.UserRespawn
             /// <summary>
             /// UserName Player which should be respawn
             /// </summary>
-            public string? UserName { get; }
 
             public UserRespawnResponseEvent(string? userName)
             {
-                UserName = userName;
             }
         }
 
@@ -64,10 +62,8 @@ namespace Content.Shared.UserRespawn
         [Serializable, NetSerializable]
         public sealed class UserRespawnRequestEvent : EntityEventArgs
         {
-            string ? UserName { get; }
-            public UserRespawnRequestEvent(string g)
+            public UserRespawnRequestEvent()
             {
-                UserName = g;
             }
         }
 

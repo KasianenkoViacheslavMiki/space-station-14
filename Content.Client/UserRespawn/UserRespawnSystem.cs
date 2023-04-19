@@ -14,9 +14,9 @@ namespace Content.Client.UserRespawn
         {
             base.Initialize();
         }
-        public bool RespawnUser(string nickname)
+        public bool RespawnUser()
         {
-            var msg = new UserRespawnRequestEvent(nickname);
+            var msg = new UserRespawnRequestEvent();
             RaiseNetworkEvent(msg);
             return true;
         }

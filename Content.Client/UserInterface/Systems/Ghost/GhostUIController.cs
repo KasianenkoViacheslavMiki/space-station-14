@@ -161,11 +161,6 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
 
     private void RespawnGhost()
     {
-        string? nickname = _system?.GetPlayerName();
-        if (nickname != null)
-        {
-            _systemRespawn?.RespawnUser(nickname);
-        }
-        return;
+        _systemRespawn?.RespawnUser();
     }
 }
