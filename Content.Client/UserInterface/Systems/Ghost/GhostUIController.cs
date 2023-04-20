@@ -7,6 +7,7 @@ using Content.Client.UserRespawn;
 using Content.Shared.Ghost;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
+using Content.Shared.UserRespawn;
 
 namespace Content.Client.UserInterface.Systems.Ghost;
 
@@ -32,15 +33,24 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     private void OnScreenLoad()
     {
         LoadGui();
+        if (_systemRespawn != null)
+        {
+            _systemRespawn.UserTimeOfDeathResponse += OnStartTimer;
+        }
     }
 
     private void OnScreenUnload()
     {
         UnloadGui();
+        if (_systemRespawn != null)
+        {
+            _systemRespawn.UserTimeOfDeathResponse -= OnStartTimer;
+        }
     }
 
     public void OnSystemLoaded(GhostSystem system)
     {
+        system.PlayerBecomeGhost += OnUserRespawnTimeRequest;
         system.PlayerRemoved += OnPlayerRemoved;
         system.PlayerUpdated += OnPlayerUpdated;
         system.PlayerAttached += OnPlayerAttached;
@@ -51,6 +61,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
 
     public void OnSystemUnloaded(GhostSystem system)
     {
+        system.PlayerBecomeGhost -= OnUserRespawnTimeRequest;
         system.PlayerRemoved -= OnPlayerRemoved;
         system.PlayerUpdated -= OnPlayerUpdated;
         system.PlayerAttached -= OnPlayerAttached;
@@ -69,7 +80,14 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         Gui.Visible = _system?.IsGhost ?? false;
         Gui.Update(_system?.AvailableGhostRoleCount, _system?.Player?.CanReturnToBody);
     }
-
+    private void OnStartTimer(SharedUserRespawnSystem.UserRespawnTimeResponseEvent msg)
+    {
+        if (Gui != null && _systemRespawn != null)
+        {
+            Gui.Timer = (float) msg._respawn_time.TotalSeconds;
+            Gui.StartTimer = true;
+        }
+    }
     private void OnPlayerRemoved(GhostComponent component)
     {
         Gui?.Hide();
@@ -84,7 +102,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     {
         if (Gui == null)
             return;
-
+        
         Gui.Visible = true;
         UpdateGui();
     }
@@ -112,6 +130,11 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     {
         var msg = new GhostWarpToTargetRequestEvent(player);
         _net.SendSystemNetworkMessage(msg);
+    }
+
+    private void OnUserRespawnTimeRequest()
+    {
+        _systemRespawn?.OnUserRespawnTimeRequest();
     }
 
     public void LoadGui()
@@ -161,6 +184,6 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
 
     private void RespawnGhost()
     {
-        _systemRespawn?.RespawnUser();
+        _systemRespawn?.OnUserRespawnRequest();
     }
 }

@@ -35,11 +35,6 @@ namespace Content.Shared.UserRespawn
                 args.Cancel();
         }
 
-        public void SetTimeOfDeath(SharedUserRespawnComponent component, DateTime value)
-        {
-            //component.TimeOfDeath = value;
-        }
-
         /// <summary>
         /// A server to client response for a <see cref="UserRespawnRequestEvent"/>.
         /// 
@@ -68,29 +63,31 @@ namespace Content.Shared.UserRespawn
         }
 
         /// <summary>
-        /// A server to client response for a <see cref="UserTimeOfDeathRequestEvent"/>.
+        /// A server to client response for a <see cref="UserRespawnTimeRequestEvent"/>.
         /// 
         /// </summary>
         [Serializable, NetSerializable]
-        public sealed class UserTimeOfDeathResponseEvent : EntityEventArgs
+        public sealed class UserRespawnTimeResponseEvent : EntityEventArgs
         {
-            public UserTimeOfDeathResponseEvent()
-            {
-            }
-
             /// <summary>
-            /// A list of warp points.
+            /// Time of death player
             /// </summary>
+            public TimeSpan _respawn_time;
+
+            public UserRespawnTimeResponseEvent(TimeSpan respawn_time)
+            {
+                _respawn_time = respawn_time;
+            }
         }
 
         /// <summary>
         ///  A client to server request for 
         /// </summary>
         [Serializable, NetSerializable]
-        public sealed class UserTimeOfDeathRequestEvent : EntityEventArgs
+        public sealed class UserRespawnTimeRequestEvent : EntityEventArgs
         {
 
-            public UserTimeOfDeathRequestEvent()
+            public UserRespawnTimeRequestEvent()
             {
             }
         }

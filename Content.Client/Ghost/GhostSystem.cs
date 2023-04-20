@@ -44,6 +44,7 @@ namespace Content.Client.Ghost
         public GhostComponent? Player => CompOrNull<GhostComponent>(_playerManager.LocalPlayer?.ControlledEntity);
         public bool IsGhost => Player != null;
 
+        public event Action? PlayerBecomeGhost;
         public event Action<GhostComponent>? PlayerRemoved;
         public event Action<GhostComponent>? PlayerUpdated;
         public event Action<GhostComponent>? PlayerAttached;
@@ -74,6 +75,8 @@ namespace Content.Client.Ghost
 
         private void OnGhostInit(EntityUid uid, GhostComponent component, ComponentInit args)
         {
+            PlayerBecomeGhost?.Invoke();
+
             if (TryComp(component.Owner, out SpriteComponent? sprite))
             {
                 sprite.Visible = GhostVisibility;
