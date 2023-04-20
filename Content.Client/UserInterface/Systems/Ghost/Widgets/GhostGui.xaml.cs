@@ -18,6 +18,22 @@ public sealed partial class GhostGui : UIWidget
     public bool StartTimer { get => _startTimer; set => _startTimer = value; }
     public float Timer { get => _timer; set => _timer = value; }
 
+    public string StringTimer
+    {
+        get
+        {
+            if (Timer >= 3600)
+            {
+                return Loc.GetString("ghost-gui-ghost-respawn-button-timer-hours", ("time", $"{(int)Timer / 3600}"));
+            }
+            if (Timer >= 60 && Timer < 3600)
+            {
+                return Loc.GetString("ghost-gui-ghost-respawn-button-timer-minutes", ("time", $"{(int)(Timer / 60)+1}"));
+            }
+            return Loc.GetString("ghost-gui-ghost-respawn-button-timer-seconds", ("time", $"{Timer:0.0}"));
+        }
+    }
+
     private bool _canRespawn = false;
     private float _timer;
     private bool _startTimer = false;
@@ -97,7 +113,7 @@ public sealed partial class GhostGui : UIWidget
             {
                 GhostRespawnButton.Disabled = true;
                 _timer -= args.DeltaSeconds;
-                GhostRespawnButton.Text = Loc.GetString("ghost-gui-ghost-respawn-button-timer", ("time", $"{_timer:0.0}"));
+                GhostRespawnButton.Text = StringTimer;
             }
             else
             {

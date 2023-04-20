@@ -68,7 +68,7 @@ namespace Content.Server.UserRespawn
                 return;
             }
             TimeSpan timeOfDeath = ghostComponent.TimeOfDeath;
-            TimeSpan timerForRespawn = TimeSpan.FromSeconds(60);
+            TimeSpan timerForRespawn = TimeSpan.FromSeconds(120);
             TimeSpan curTime = _gameTiming.CurTime;
             var respawn_time = (timeOfDeath + timerForRespawn) - curTime;
             var response = new UserRespawnTimeResponseEvent(respawn_time);

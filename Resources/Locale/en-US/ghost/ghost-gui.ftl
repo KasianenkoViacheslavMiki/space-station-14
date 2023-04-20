@@ -11,7 +11,9 @@ ghost-gui-toggle-fov-name = Toggle FoV
 ghost-gui-toggle-fov-desc = Toggles field-of-view in order to see what players see.
 ghost-gui-toggle-fov-popup = Toggled field-of-view.
 ghost-gui-ghost-respawn-button = Respawn 
-ghost-gui-ghost-respawn-button-timer = Respawn ({$time}s)
+ghost-gui-ghost-respawn-button-timer-seconds = Respawn ({$time}s)
+ghost-gui-ghost-respawn-button-timer-minutes = Respawn ({$time}m)
+ghost-gui-ghost-respawn-button-timer-hours = Respawn ({$time}h)
 
 ghost-target-window-title = Ghost Warp
 ghost-target-window-current-button = Warp: {$name}
