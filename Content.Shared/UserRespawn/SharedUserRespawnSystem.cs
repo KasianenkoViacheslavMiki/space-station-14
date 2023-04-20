@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Content.Shared.DragDrop;
 using Content.Shared.Emoting;
-using Content.Shared.Ghost;
 using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;

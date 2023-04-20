@@ -1,8 +1,5 @@
-using Content.Server.Database;
 using Content.Server.GameTicking;
-using Content.Server.Ghost;
 using Content.Server.Ghost.Components;
-using Content.Shared.Ghost;
 using Content.Shared.UserRespawn;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
@@ -60,13 +57,6 @@ namespace Content.Server.UserRespawn
                 return;
             }
 
-            //var ticker = EntitySystem.Get<GameTicker>();
-            //EntityManager.TryGetComponent(args.SenderSession.AttachedEntity, out ActorComponent? actor);
-
-            //if (actor == null)
-            //{
-            //    return;
-            //}
             EntityUid? entityUid = args.SenderSession.AttachedEntity;
             if (entityUid == null)
             {

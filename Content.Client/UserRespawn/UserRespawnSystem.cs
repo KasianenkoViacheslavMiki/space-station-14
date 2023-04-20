@@ -12,12 +12,7 @@ namespace Content.Client.UserRespawn
 {
     public sealed class UserRespawnSystem: SharedUserRespawnSystem
     {
-        [Dependency] private readonly IGameTiming _gameTiming = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = IoCManager.Resolve<IConfigurationManager>();
-
-        float _timer = 0;
         private TimeSpan _respawn_time;
-        bool startRespawnTimer = false;
 
         public TimeSpan Respawn_time { get => _respawn_time; set => _respawn_time = value; }
 
@@ -26,9 +21,7 @@ namespace Content.Client.UserRespawn
         public override void Initialize()
         {
             base.Initialize();
-
             SubscribeNetworkEvent<UserRespawnTimeResponseEvent>(OnUserRespawnTimeResponse);
-
         }
         public bool OnUserRespawnRequest()
         {
@@ -44,37 +37,12 @@ namespace Content.Client.UserRespawn
             }
 
             this.Respawn_time = msg._respawn_time;
-            startRespawnTimer = true;
             UserTimeOfDeathResponse?.Invoke(msg);
         }
         public void OnUserRespawnTimeRequest()
         {
             var msg = new UserRespawnTimeRequestEvent();
             RaiseNetworkEvent(msg);
-        }
-
-        public override void Update(float frameTime)
-        {
-            base.Update(frameTime);
-            //if (startRespawnTimer)
-            //{
-            //    var old = _respawn_time;
-            //    _respawn_time -= TimeSpan.FromMilliseconds(frameTime * 100);
-            //    var difference = _gameTicker.StartTime - _gameTiming.CurTime;
-            //    var seconds = difference.TotalSeconds;
-            //    if (seconds < 0)
-            //    {
-            //        text = Loc.GetString(seconds < -5 ? "lobby-state-right-now-question" : "lobby-state-right-now-confirmation");
-            //    }
-            //    else
-            //    {
-            //        text = $"{difference.Minutes}:{difference.Seconds:D2}";
-            //    }
-            //    if (_respawn_time.TotalSeconds < 1)
-            //    {
-
-            //    }
-            //}
         }
     }
 }
