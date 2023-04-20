@@ -1,0 +1,3 @@
+- type: timerespawn
+  id: timerespawntime
+  timetorespawn: 120

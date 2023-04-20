@@ -5,6 +5,7 @@ using Content.Server.Ghost.Components;
 using Content.Shared.Ghost;
 using Content.Shared.UserRespawn;
 using Robust.Server.GameObjects;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,9 @@ namespace Content.Server.UserRespawn
     public sealed class UserRespawnSystem:  SharedUserRespawnSystem
     {
         [Dependency] private readonly IGameTiming _gameTiming = default!;
+        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+
+        TimeSpan _timerForRespawn = TimeSpan.FromSeconds(120);
 
         public override void Initialize()
         {
@@ -24,6 +28,12 @@ namespace Content.Server.UserRespawn
             SubscribeNetworkEvent<UserRespawnRequestEvent>(OnUserRespawnRequest);
             SubscribeNetworkEvent<UserRespawnTimeRequestEvent>(OnUserTimeOfDeathRequest);
 
+            _prototypeManager.TryIndex<TimeRespawnPrototype>("timerespawntime", out TimeRespawnPrototype? timeRespawn);
+
+            if (timeRespawn != null && timeRespawn.TimeToRespawn != null)
+            {
+                _timerForRespawn = TimeSpan.FromSeconds((double) timeRespawn.TimeToRespawn);
+            }
         }
 
         private void OnUserRespawnRequest(UserRespawnRequestEvent msg, EntitySessionEventArgs args)
@@ -68,9 +78,8 @@ namespace Content.Server.UserRespawn
                 return;
             }
             TimeSpan timeOfDeath = ghostComponent.TimeOfDeath;
-            TimeSpan timerForRespawn = TimeSpan.FromSeconds(120);
             TimeSpan curTime = _gameTiming.CurTime;
-            var respawn_time = (timeOfDeath + timerForRespawn) - curTime;
+            var respawn_time = (timeOfDeath + _timerForRespawn) - curTime;
             var response = new UserRespawnTimeResponseEvent(respawn_time);
             RaiseNetworkEvent(response, args.SenderSession.ConnectedClient);
         }
