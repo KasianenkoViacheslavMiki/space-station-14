@@ -1,7 +1,9 @@
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Components;
+using Content.Server.Players;
 using Content.Shared.UserRespawn;
 using Robust.Server.GameObjects;
+using Robust.Server.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using System;
@@ -16,6 +18,8 @@ namespace Content.Server.UserRespawn
     {
         [Dependency] private readonly IGameTiming _gameTiming = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+        [Dependency] private readonly IPlayerManager _playereManager = default!;
+
 
         TimeSpan _timerForRespawn = TimeSpan.FromSeconds(120);
 
@@ -58,16 +62,16 @@ namespace Content.Server.UserRespawn
             }
 
             EntityUid? entityUid = args.SenderSession.AttachedEntity;
-            if (entityUid == null)
+            var dataPlayer = _playereManager.GetPlayerData(args.SenderSession.UserId).ContentData();
+            if (!(dataPlayer != null && dataPlayer.Mind != null))
             {
                 return;
             }
-            var ghostComponent = Comp<GhostComponent>((EntityUid)entityUid);
-            if (ghostComponent.TimeOfDeath == null)
+            if (dataPlayer.Mind.TimeOfDeath == null)
             {
-                return;
+                dataPlayer.Mind.TimeOfDeath = _gameTiming.CurTime;
             }
-            TimeSpan timeOfDeath = ghostComponent.TimeOfDeath;
+            TimeSpan timeOfDeath = (TimeSpan) dataPlayer.Mind.TimeOfDeath;
             TimeSpan curTime = _gameTiming.CurTime;
             var respawn_time = (timeOfDeath + _timerForRespawn) - curTime;
             var response = new UserRespawnTimeResponseEvent(respawn_time);
