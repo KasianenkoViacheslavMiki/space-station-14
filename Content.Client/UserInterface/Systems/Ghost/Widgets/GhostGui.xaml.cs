@@ -63,7 +63,7 @@ public sealed partial class GhostGui : UIWidget
 
         if (!_canRespawn)
         {
-            GhostRespawnButton.Text = Loc.GetString("ghost-gui-ghost-respawn-button-timer", ("time", $"{_timer:0.0}"));
+            GhostRespawnButton.Text = Loc.GetString("ghost-gui-ghost-respawn-button-timer-seconds", ("time", $"{_timer:0.0}"));
             GhostRespawnButton.Disabled = true;
         }
     }
