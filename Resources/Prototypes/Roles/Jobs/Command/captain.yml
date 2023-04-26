@@ -15,8 +15,6 @@
       time: 18000
     - !type:OverallPlaytimeRequirement
       time: 108000
-    - !type:RaceRequirement
-      race: slimeperson
   weight: 20
   startingGear: CaptainGear
   icon: "Captain"

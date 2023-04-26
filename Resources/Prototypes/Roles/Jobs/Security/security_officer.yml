@@ -7,8 +7,6 @@
     - !type:DepartmentTimeRequirement
       department: Security
       time: 3600 #1 hr
-    - !type:RaceRequirement
-      race: diona
   startingGear: SecurityOfficerGear
   icon: "SecurityOfficer"
   supervisors: job-supervisors-hos

@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Content.Shared.CCVar;
 using Content.Shared.Players.PlayTimeTracking;
@@ -75,7 +75,7 @@ public sealed class PlayTimeTrackingManager
             if (JobRequirements.TryRequirementMet(requirement, roles, out reason, _prototypes))
                 continue;
 
-            if (!first && requirement is not RaceRequirement)
+            if (!first)
                 reasonBuilder.Append('\n');
             first = false;
 

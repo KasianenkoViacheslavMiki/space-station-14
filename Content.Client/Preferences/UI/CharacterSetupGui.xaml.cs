@@ -133,8 +133,8 @@ namespace Content.Client.Preferences.UI
                 {
                     _humanoidProfileEditor.Profile = (HumanoidCharacterProfile)character;
                     _humanoidProfileEditor.CharacterSlot = characterIndexCopy;
-                    _preferencesManager.SelectCharacter(character);
                     _humanoidProfileEditor.UpdateControls();
+                    _preferencesManager.SelectCharacter(character);
                     UpdateUI();
                     args.Event.Handle();
                 };

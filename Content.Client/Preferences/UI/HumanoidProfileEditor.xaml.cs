@@ -3,7 +3,6 @@ using Content.Client.Humanoid;
 using Content.Client.Lobby.UI;
 using Content.Client.Message;
 using Content.Client.Players.PlayTimeTracking;
-using Content.Client.Players.RaceTracking;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.CCVar;
@@ -381,7 +380,6 @@ namespace Content.Client.Preferences.UI
 
             var firstCategory = true;
             var playTime = IoCManager.Resolve<PlayTimeTrackingManager>();
-            var race = IoCManager.Resolve<RaceTrackingManager>();
 
             foreach (var department in _prototypeManager.EnumeratePrototypes<DepartmentPrototype>())
             {
@@ -433,9 +431,10 @@ namespace Content.Client.Preferences.UI
                 foreach (var job in jobs)
                 {
                     var selector = new JobPrioritySelector(job);
-                    if (!(playTime.IsAllowed(job, out var reasonTime) & race.IsAllowed(job, out var reasonRace)))
+
+                    if (!playTime.IsAllowed(job, out var reason))
                     {
-                        selector.LockRequirements(reasonTime + reasonRace);
+                        selector.LockRequirements(reason);
                     }
 
                     category.AddChild(selector);
@@ -791,16 +790,10 @@ namespace Content.Client.Preferences.UI
         private void SetSpecies(string newSpecies)
         {
             Profile = Profile?.WithSpecies(newSpecies);
-            if (Profile == null)
-            {
-                return;
-            }
-            _preferencesManager.UpdateCharacter(Profile, CharacterSlot);
             OnSkinColorOnValueChanged(); // Species may have special color prefs, make sure to update it.
             CMarkings.SetSpecies(newSpecies); // Repopulate the markings tab as well.
             UpdateSexControls(); // update sex for new species
             RebuildSpriteView(); // they might have different inv so we need a new dummy
-            UpdateJobPriorities();
             IsDirty = true;
             _needUpdatePreview = true;
         }
@@ -845,7 +838,6 @@ namespace Content.Client.Preferences.UI
                 UpdateSaveButton();
             }
         }
-
 
         private void UpdateNameEdit()
         {
@@ -1164,20 +1156,7 @@ namespace Content.Client.Preferences.UI
         {
             foreach (var prioritySelector in _jobPriorities)
             {
-                prioritySelector.UnlockRequirements();
-
-                var playTime = IoCManager.Resolve<PlayTimeTrackingManager>();
-                var race = IoCManager.Resolve<RaceTrackingManager>();
                 var jobId = prioritySelector.Job.ID;
-
-                if (!(playTime.IsAllowed(prioritySelector.Job, out var reasonTime) & race.IsAllowed(prioritySelector.Job, out var reasonRace)))
-                {
-                    prioritySelector.LockRequirements(reasonTime + reasonRace);
-                    if (Profile != null)
-                    {
-                        Profile = Profile.WithJobPriority(jobId, JobPriority.Never);
-                    }
-                }
 
                 var priority = Profile?.JobPriorities.GetValueOrDefault(jobId, JobPriority.Never) ?? JobPriority.Never;
 

@@ -19,10 +19,6 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Module;
 using Content.Client.Guidebook;
 using Content.Shared.Administration.Managers;
-using Content.Client.Players.RaceTracking;
-using Content.Client.Preferences.UI;
-using Content.Shared.Humanoid.Markings;
-using Content.Client.Humanoid;
 
 namespace Content.Client.IoC
 {
@@ -49,7 +45,6 @@ namespace Content.Client.IoC
             IoCManager.Register<GhostKickManager>();
             IoCManager.Register<ExtendedDisconnectInformationManager>();
             IoCManager.Register<PlayTimeTrackingManager>();
-            IoCManager.Register<RaceTrackingManager>();
             IoCManager.Register<DocumentParsingManager>();
         }
     }

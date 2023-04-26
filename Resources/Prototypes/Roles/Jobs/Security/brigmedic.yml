@@ -10,8 +10,6 @@
     - !type:DepartmentTimeRequirement
       department: Security
       time: 7200
-    - !type:RaceRequirement
-      race: diona
   startingGear: BrigmedicGear
   icon: "Brigmedic"
   supervisors: job-supervisors-hos

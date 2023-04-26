@@ -12,10 +12,6 @@
       time: 18000
     - !type:OverallPlaytimeRequirement
       time: 108000
-    - !type:RaceRequirement
-      race: slimeperson
-    - !type:RaceRequirement
-      race: diona
   weight: 10
   startingGear: HoSGear
   icon: "HeadOfSecurity"
