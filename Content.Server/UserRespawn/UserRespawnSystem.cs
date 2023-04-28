@@ -72,7 +72,7 @@ namespace Content.Server.UserRespawn
                 dataPlayer.Mind.TimeOfDeath = _gameTiming.CurTime;
             }
             TimeSpan timeOfDeath = (TimeSpan) dataPlayer.Mind.TimeOfDeath;
-            TimeSpan curTime = _gameTiming.CurTime;
+            TimeSpan curTime = _gameTiming.RealTime;
             var respawn_time = (timeOfDeath + _timerForRespawn) - curTime;
             var response = new UserRespawnTimeResponseEvent(respawn_time);
             RaiseNetworkEvent(response, args.SenderSession.ConnectedClient);
