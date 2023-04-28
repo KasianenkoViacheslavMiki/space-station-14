@@ -69,7 +69,7 @@ namespace Content.Server.UserRespawn
             }
             if (dataPlayer.Mind.TimeOfDeath == null)
             {
-                dataPlayer.Mind.TimeOfDeath = _gameTiming.CurTime;
+                dataPlayer.Mind.TimeOfDeath = _gameTiming.RealTime;
             }
             TimeSpan timeOfDeath = (TimeSpan) dataPlayer.Mind.TimeOfDeath;
             TimeSpan curTime = _gameTiming.RealTime;
