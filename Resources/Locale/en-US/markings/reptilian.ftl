@@ -57,3 +57,8 @@ marking-LizardFrillsAxolotl = Lizard Frills (Axolotl)
 
 marking-LizardFrillsHood-frills_hood = Lizard Frills (Hood)
 marking-LizardFrillsHood = Lizard Frills (Hood)
+
+marking-TailWagdTiger = Lizard Tail (Dark Tiger Wag)
+marking-TailWaglTiger = Lizard Tail (Light Tiger Wag)
+marking-TailWagSmooth = Lizard Tail (Smooth Wag)
+marking-TailWagSpike = Lizard Tail (Spike Wag)
