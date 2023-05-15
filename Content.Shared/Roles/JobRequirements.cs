@@ -13,6 +13,24 @@ namespace Content.Shared.Roles
     public abstract class JobRequirement{}
 
     [UsedImplicitly]
+    public sealed class RaceRequirement : JobRequirement
+    {
+        /// <summary>
+
+        /// </summary>
+        [DataField("race")] public string? Race;
+
+        /// <summary>
+        /// If true, requirement will return false if playtime above the specified time.
+        /// </summary>
+        /// <value>
+        /// <c>False</c> by default.<br />
+        /// <c>True</c> for invert general requirement
+        /// </value>
+        [DataField("inverted")] public bool Inverted;
+    }
+
+    [UsedImplicitly]
     public sealed class DepartmentTimeRequirement : JobRequirement
     {
         /// <summary>
@@ -195,8 +213,40 @@ namespace Content.Shared.Roles
 
                         return true;
                     }
+                case RaceRequirement roleRequirement:
+                    reason = "";
+                    return true;
                 default:
                     throw new NotImplementedException();
+            }
+        }
+        public static bool TryRequirementMet(
+           JobRequirement requirement,
+           string species,
+           [NotNullWhen(false)] out string? reason,
+           IPrototypeManager prototypes)
+
+        {
+            reason = null;
+            var roleRequirement = requirement as RaceRequirement;
+            if (roleRequirement == null)
+            {
+                reason = "";
+                return false;
+            }
+            var race = roleRequirement.Race;
+
+            if (!roleRequirement.Inverted)
+            {
+                if (race?.ToLower() != species.ToLower())
+                    return true;
+                string nameSpecies = Loc.GetString("species-name-"+species.ToLower().Replace("person",""));
+                reason = Loc.GetString("role-timer-race-ban", ("race", nameSpecies.ToLower()));
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }

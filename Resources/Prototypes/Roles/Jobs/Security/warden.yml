@@ -7,6 +7,8 @@
     - !type:DepartmentTimeRequirement
       department: Security
       time: 10800
+    - !type:RaceRequirement
+      race: diona
   startingGear: WardenGear
   icon: "Warden"
   supervisors: job-supervisors-hos
