@@ -2891,3 +2891,8 @@ Entries:
   - {message: slime puddles now slow you down by 25%, type: Add}
   id: 3773
   time: '2023-05-15T18:49:49.0000000+00:00'
+- author: "DEATHB4DEFEAT"
+  changes:
+    - { message: 'Add 4 Reptilian tails that wag.', type: Add }
+  id: 540000
+  time: "2023-05-17T03:52:40.0000000+00:00"
