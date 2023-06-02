@@ -20,6 +20,7 @@ using Content.Shared.Module;
 using Content.Client.Guidebook;
 using Content.Client.Replay;
 using Content.Shared.Administration.Managers;
+using Content.Client.Players.RaceTracking;
 
 namespace Content.Client.IoC
 {
@@ -44,6 +45,7 @@ namespace Content.Client.IoC
             IoCManager.Register<GhostKickManager>();
             IoCManager.Register<ExtendedDisconnectInformationManager>();
             IoCManager.Register<JobRequirementsManager>();
+            IoCManager.Register<SpeciesRequirementsManager>();
             IoCManager.Register<DocumentParsingManager>();
             IoCManager.Register<ContentReplayPlaybackManager, ContentReplayPlaybackManager>();
         }

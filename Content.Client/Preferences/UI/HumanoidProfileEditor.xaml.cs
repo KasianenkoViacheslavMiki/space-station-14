@@ -3,6 +3,7 @@ using Content.Client.Humanoid;
 using Content.Client.Lobby.UI;
 using Content.Client.Message;
 using Content.Client.Players.PlayTimeTracking;
+using Content.Client.Players.RaceTracking;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.CCVar;
@@ -54,6 +55,7 @@ namespace Content.Client.Preferences.UI
         private readonly IConfigurationManager _configurationManager;
         private readonly MarkingManager _markingManager;
         private readonly JobRequirementsManager _requirements;
+        private readonly SpeciesRequirementsManager _speciesRequirements;
 
         private LineEdit _ageEdit => CAgeEdit;
         private LineEdit _nameEdit => CNameEdit;
@@ -379,6 +381,8 @@ namespace Content.Client.Preferences.UI
             _jobPriorities = new List<JobPrioritySelector>();
             _jobCategories = new Dictionary<string, BoxContainer>();
             _requirements = IoCManager.Resolve<JobRequirementsManager>();
+            _speciesRequirements = IoCManager.Resolve<SpeciesRequirementsManager>();
+            _speciesRequirements.Updated += UpdateRoleRequirements;
             _requirements.Updated += UpdateRoleRequirements;
             UpdateRoleRequirements();
 
@@ -575,9 +579,9 @@ namespace Content.Client.Preferences.UI
                 {
                     var selector = new JobPrioritySelector(job);
 
-                    if (!_requirements.IsAllowed(job, out var reason))
+                    if (!(_requirements.IsAllowed(job, out var reasonTime) & _speciesRequirements.IsAllowed(job, out var reasonRace)))
                     {
-                        selector.LockRequirements(reason);
+                        selector.LockRequirements(reasonTime+ reasonRace);
                     }
 
                     category.AddChild(selector);
@@ -800,10 +804,16 @@ namespace Content.Client.Preferences.UI
         private void SetSpecies(string newSpecies)
         {
             Profile = Profile?.WithSpecies(newSpecies);
+            if (Profile == null)
+            {
+                return;
+            }
+            _preferencesManager.UpdateCharacter(Profile, CharacterSlot);
             OnSkinColorOnValueChanged(); // Species may have special color prefs, make sure to update it.
             CMarkings.SetSpecies(newSpecies); // Repopulate the markings tab as well.
             UpdateSexControls(); // update sex for new species
             RebuildSpriteView(); // they might have different inv so we need a new dummy
+            UpdateJobPriorities();
             IsDirty = true;
             _needUpdatePreview = true;
         }
@@ -1166,7 +1176,17 @@ namespace Content.Client.Preferences.UI
         {
             foreach (var prioritySelector in _jobPriorities)
             {
+                prioritySelector.UnlockRequirements();
                 var jobId = prioritySelector.Job.ID;
+
+                if (!(_requirements.IsAllowed(prioritySelector.Job, out var reasonTime) & _speciesRequirements.IsAllowed(prioritySelector.Job, out var reasonRace)))
+                {
+                    prioritySelector.LockRequirements(reasonTime + reasonRace);
+                    if (Profile != null)
+                    {
+                        Profile = Profile.WithJobPriority(jobId, JobPriority.Never);
+                    }
+                }
 
                 var priority = Profile?.JobPriorities.GetValueOrDefault(jobId, JobPriority.Never) ?? JobPriority.Never;
 
