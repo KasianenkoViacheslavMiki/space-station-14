@@ -15,6 +15,10 @@
       time: 18000
     - !type:OverallPlaytimeRequirement
       time: 108000
+    - !type:RaceRequirement
+      race: slimeperson
+    - !type:RaceRequirement
+      race: reptilian
   weight: 20
   startingGear: CaptainGear
   icon: "Captain"

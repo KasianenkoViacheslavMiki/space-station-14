@@ -62,6 +62,18 @@ namespace Content.Shared.Roles
         [DataField("inverted")] public bool Inverted;
     }
 
+    [UsedImplicitly]
+    public sealed class RaceRequirement : JobRequirement
+    {
+        /// <summary>
+
+        /// </summary>
+        [DataField("race")] public string? Race;
+
+        /// <inheritdoc cref="DepartmentTimeRequirement.Inverted"/>
+        [DataField("inverted")] public bool Inverted;
+    }
+
     public static class JobRequirements
     {
         public static bool TryRequirementsMet(
@@ -82,6 +94,37 @@ namespace Content.Shared.Roles
 
             return true;
         }
+
+        public static bool TryRequirementMet(
+           JobRequirement requirement,
+           string species,
+           [NotNullWhen(false)] out string? reason,
+           IPrototypeManager prototypes)
+
+        {
+            reason = null;
+            var roleRequirement = requirement as RaceRequirement;
+            if (roleRequirement == null)
+            {
+                reason = "";
+                return false;
+            }
+            var race = roleRequirement.Race;
+
+            if (!roleRequirement.Inverted)
+            {
+                if (race?.ToLower() != species.ToLower())
+                    return true;
+                string nameSpecies = Loc.GetString("species-name-" + species.ToLower().Replace("person", ""));
+                reason = Loc.GetString("role-timer-race-ban", ("race", nameSpecies.ToLower()));
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
 
         /// <summary>
         /// Returns a string with the reason why a particular requirement may not be met.
