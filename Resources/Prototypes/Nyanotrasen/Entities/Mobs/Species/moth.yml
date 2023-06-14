@@ -42,11 +42,12 @@
   - type: MovementAlwaysTouching
   - type: Fixtures
     fixtures:
-      - shape:
-          !type:PhysShapeCircle
-          radius: 0.35
-        density: 125 #lower density
-        restitution: 0.0
+      fix1:
+        shape:
+            !type:PhysShapeCircle
+            radius: 0.35
+            density: 125 #lower density
+            restitution: 0.0
         mask:
           - MobMask
         layer:
