@@ -5,6 +5,9 @@
   id: BaseMobMoth
   abstract: true
   components:
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.0
+    baseSprintSpeed: 5.0
   - type: HumanoidAppearance
     species: Moth
   - type: Hunger
