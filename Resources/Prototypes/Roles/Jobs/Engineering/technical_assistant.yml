@@ -8,6 +8,11 @@
       department: Engineering
       time: 54000 #15 hrs
       inverted: true # stop playing intern if you're good at engineering!
+  jobBlockForSpecies:
+    - !type:JobBlockForSpecie
+     nameSpecie: reptilian
+    - !type:JobBlockForSpecie
+     nameSpecie: slimeperson
   startingGear: TechnicalAssistantGear
   icon: "JobIconTechnicalAssistant"
   supervisors: job-supervisors-engineering

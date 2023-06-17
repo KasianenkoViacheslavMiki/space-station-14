@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using Content.Client.Preferences;
 using Content.Shared.CCVar;
 using Content.Shared.Players;
 using Content.Shared.Players.PlayTimeTracking;
+using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Client;
 using Robust.Client.Player;
@@ -20,6 +22,7 @@ public sealed class JobRequirementsManager
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private readonly IClientPreferencesManager _clientPreferences = default!;
 
     private readonly Dictionary<string, TimeSpan> _roles = new();
     private readonly List<string> _roleBans = new();
@@ -112,6 +115,28 @@ public sealed class JobRequirementsManager
             first = false;
 
             reasonBuilder.AppendLine(reason);
+        }
+
+        reason = null;
+
+        if (job.JobBlockForSpecies != null)
+        {
+            if (_clientPreferences == null || _clientPreferences.Preferences == null)
+                return true;
+
+            var nameSpecie = ((HumanoidCharacterProfile) _clientPreferences.Preferences.SelectedCharacter).Species;
+
+            foreach (var jobBlockForSpecie in job.JobBlockForSpecies)
+            {
+                if (JobBlockForSpecies.TryRequirementMet(jobBlockForSpecie, nameSpecie, out reason))
+                    continue;
+
+                if (!first)
+                    reasonBuilder.Append('\n');
+                first = false;
+
+                reasonBuilder.AppendLine(reason);
+            }
         }
 
         reason = reasonBuilder.Length == 0 ? null : reasonBuilder.ToString();

@@ -800,10 +800,12 @@ namespace Content.Client.Preferences.UI
         private void SetSpecies(string newSpecies)
         {
             Profile = Profile?.WithSpecies(newSpecies);
+            Save();
             OnSkinColorOnValueChanged(); // Species may have special color prefs, make sure to update it.
             CMarkings.SetSpecies(newSpecies); // Repopulate the markings tab as well.
             UpdateSexControls(); // update sex for new species
             RebuildSpriteView(); // they might have different inv so we need a new dummy
+            UpdateJobPriorities();
             IsDirty = true;
             _needUpdatePreview = true;
         }
@@ -1169,7 +1171,17 @@ namespace Content.Client.Preferences.UI
         {
             foreach (var prioritySelector in _jobPriorities)
             {
+                prioritySelector.UnlockRequirements();
                 var jobId = prioritySelector.Job.ID;
+
+                if (!_requirements.IsAllowed(prioritySelector.Job, out var reason))
+                {
+                    prioritySelector.LockRequirements(reason);
+                    if (Profile != null)
+                    {
+                        Profile = Profile.WithJobPriority(jobId, JobPriority.Never);
+                    }
+                }
 
                 var priority = Profile?.JobPriorities.GetValueOrDefault(jobId, JobPriority.Never) ?? JobPriority.Never;
 
