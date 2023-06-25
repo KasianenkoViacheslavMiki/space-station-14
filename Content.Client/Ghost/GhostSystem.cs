@@ -54,6 +54,9 @@ namespace Content.Client.Ghost
         public event Action<GhostWarpsResponseEvent>? GhostWarpsResponse;
         public event Action<GhostUpdateGhostRoleCountEvent>? GhostRoleCountUpdated;
 
+        //Sich`s event
+        public event Action? PlayerBecomeGhost;
+
         public override void Initialize()
         {
             base.Initialize();
@@ -85,6 +88,9 @@ namespace Content.Client.Ghost
             _actions.AddAction(uid, component.ToggleLightingAction, null);
             _actions.AddAction(uid, component.ToggleFoVAction, null);
             _actions.AddAction(uid, component.ToggleGhostsAction, null);
+
+            //Sich`s invoke event
+            PlayerBecomeGhost?.Invoke();
         }
 
         private void OnToggleLighting(EntityUid uid, GhostComponent component, ToggleLightingActionEvent args)
