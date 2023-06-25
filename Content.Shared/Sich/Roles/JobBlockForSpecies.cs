@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
-namespace Content.Shared.Roles
+namespace Content.Shared.Sich.Roles
 {
     [ImplicitDataDefinitionForInheritors]
     public abstract class JobBlockAbstract { }
@@ -43,7 +43,7 @@ namespace Content.Shared.Roles
             {
                 if (race?.ToLower() != species.ToLower())
                     return true;
-                string nameSpecies = Loc.GetString("species-name-" + species.ToLower().Replace("person", ""));
+                var nameSpecies = Loc.GetString("species-name-" + species.ToLower().Replace("person", ""));
                 reason = Loc.GetString("role-timer-race-ban", ("race", nameSpecies.ToLower()));
                 return false;
             }

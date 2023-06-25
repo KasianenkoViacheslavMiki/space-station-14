@@ -7,6 +7,7 @@ using Content.Shared.Players;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Content.Shared.Sich.Roles;
 using Robust.Client;
 using Robust.Client.Player;
 using Robust.Shared.Configuration;
