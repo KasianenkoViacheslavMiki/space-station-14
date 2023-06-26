@@ -52,8 +52,9 @@ namespace Content.Server.Sich.UserRespawn
 
             var ghostComponent = Comp<GhostComponent>(entityUid);
 
-            TimeSpan curTime = _gameTiming.CurTime;
-            TimeSpan respawn_time = (ghostComponent.TimeOfDeath + _timerForRespawn) - curTime;
+            var timeSinceDeath = _gameTiming.RealTime.Subtract(ghostComponent.TimeOfDeath);
+
+            TimeSpan respawn_time = _timerForRespawn - timeSinceDeath;
             RaiseNetworkEvent(new UserRespawnTimeResponseEvent(respawn_time), args.SenderSession.ConnectedClient);
         }
     }
