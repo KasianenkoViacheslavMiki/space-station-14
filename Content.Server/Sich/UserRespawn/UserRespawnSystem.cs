@@ -3,7 +3,7 @@ using Content.Server.Ghost.Components;
 using Content.Shared.Sich.UserRespawn;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
-
+using Robust.Shared.Timing;
 
 namespace Content.Server.Sich.UserRespawn
 {
@@ -11,6 +11,7 @@ namespace Content.Server.Sich.UserRespawn
     {
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
+        [Dependency] private readonly IGameTiming _gameTiming = default!;
         TimeSpan _timerForRespawn = TimeSpan.FromSeconds(120);
 
         public override void Initialize()
@@ -51,7 +52,8 @@ namespace Content.Server.Sich.UserRespawn
 
             var ghostComponent = Comp<GhostComponent>(entityUid);
 
-            TimeSpan respawn_time =  _timerForRespawn - ghostComponent.TimeOfDeath;
+            TimeSpan curTime = _gameTiming.CurTime;
+            TimeSpan respawn_time = (ghostComponent.TimeOfDeath + _timerForRespawn) - curTime;
             RaiseNetworkEvent(new UserRespawnTimeResponseEvent(respawn_time), args.SenderSession.ConnectedClient);
         }
     }
